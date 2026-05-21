@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WorkGraph AI — A Strategic Brief on AI Work Intelligence for Cloud Desktops</title>
+<meta name="description" content="A strategic product brief that re-frames a VM-based desktop monitoring system as an AI Work Intelligence Platform: workflow graph, knowledge graph, SOP factory, agent skills, and cloud desktop cost governance." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#F5F1EA;
+    --paper-soft:#EFEAE0;
+    --ink:#111111;
+    --ink-soft:#2A2826;
+    --ink-mute:#5C5854;
+    --rule:#1F1B16;
+    --hairline:rgba(17,17,17,0.18);
+    --hairline-soft:rgba(17,17,17,0.10);
+    --accent:#B23A2F;
+    --accent-soft:#E9CFC8;
+    --leaf:#1F4D3B;
+    --leaf-soft:#CFDDD2;
+    --gold:#9A7B3A;
+    --max:1160px;
+    --gap:32px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter Tight","Noto Sans SC",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16.5px;
+    line-height:1.72;
+    font-feature-settings:"ss01","cv11";
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:#111;color:#F5F1EA}
+  a{color:inherit;text-decoration:none}
+  /* paper grain */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;
+    background-image:radial-gradient(rgba(17,17,17,0.04) 1px,transparent 1px);
+    background-size:3px 3px;
+    mix-blend-mode:multiply;
+    z-index:0;
+    opacity:.55;
+  }
+  .frame{
+    position:relative;
+    z-index:1;
+    max-width:var(--max);
+    margin:0 auto;
+    padding:48px 28px 96px;
+  }
+  /* masthead */
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-top:2px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+    padding:18px 0 14px;
+    margin-bottom:48px;
+  }
+  .masthead .brand{
+    font-family:"Fraunces",serif;
+    font-weight:600;
+    font-size:22px;
+    letter-spacing:-0.01em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .glyph{
+    font-family:"JetBrains Mono",ui-monospace,monospace;
+    font-size:13px;
+    border:1px solid var(--ink);
+    padding:2px 6px;
+    line-height:1;
+  }
+  .masthead .meta{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-mute);
+    text-align:right;
+  }
+  /* hero */
+  .hero{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:24px;
+    margin:8px 0 80px;
+  }
+  .kicker{
+    font-family:"JetBrains Mono",monospace;
+    text-transform:uppercase;
+    font-size:12px;
+    letter-spacing:0.22em;
+    color:var(--accent);
+  }
+  .hero h1{
+    font-family:"Fraunces",serif;
+    font-weight:500;
+    font-size: clamp(40px, 6vw, 76px);
+    line-height:1.02;
+    letter-spacing:-0.025em;
+    margin:8px 0 0;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--accent);
+  }
+  .hero .deck{
+    font-family:"Fraunces",serif;
+    font-weight:400;
+    font-size: clamp(20px, 2.1vw, 26px);
+    line-height:1.45;
+    color:var(--ink-soft);
+    max-width:880px;
+    margin:18px 0 0;
+  }
+  .byline{
+    display:flex;flex-wrap:wrap;
+    gap:18px 28px;
+    margin-top:34px;
+    padding-top:18px;
+    border-top:1px solid var(--hairline);
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);
+  }
+  .byline strong{color:var(--ink);font-weight:600}
+  /* layout */
+  .columns{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:56px;
+    align-items:flex-start;
+  }
+  nav.toc{
+    position:sticky;
+    top:24px;
+    border-top:1px solid var(--ink);
+    padding-top:14px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;
+    letter-spacing:.04em;
+  }
+  nav.toc .label{
+    text-transform:uppercase;
+    color:var(--ink-mute);
+    margin-bottom:14px;
+    letter-spacing:.18em;
+  }
+  nav.toc ol{
+    list-style:none;margin:0;padding:0;
+    counter-reset: toc;
+  }
+  nav.toc li{margin:0}
+  nav.toc a{
+    display:flex;
+    gap:10px;
+    padding:7px 0;
+    border-bottom:1px dashed var(--hairline-soft);
+    color:var(--ink-soft);
+    transition: color .18s ease;
+  }
+  nav.toc a:hover{color:var(--accent)}
+  nav.toc a .num{
+    color:var(--ink-mute);
+    min-width:34px;
+  }
+  /* article */
+  article{min-width:0}
+  section.block{
+    padding:72px 0 8px;
+    border-top:1px solid var(--ink);
+  }
+  section.block:first-of-type{border-top:none;padding-top:8px}
+  .section-head{
+    display:flex;align-items:baseline;gap:18px;
+    margin-bottom:18px;
+  }
+  .section-index{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;
+    letter-spacing:.22em;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+  h2{
+    font-family:"Fraunces",serif;
+    font-weight:500;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height:1.1;
+    letter-spacing:-0.02em;
+    margin:0 0 10px;
+  }
+  h3{
+    font-family:"Fraunces",serif;
+    font-weight:500;
+    font-size: 22px;
+    margin:34px 0 8px;
+    letter-spacing:-0.01em;
+  }
+  h4{
+    font-family:"Inter Tight",sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12px;
+    color:var(--ink-mute);
+    margin:22px 0 8px;
+  }
+  p{margin:12px 0;max-width:72ch}
+  p.lead{
+    font-family:"Fraunces",serif;
+    font-size:21px;
+    line-height:1.55;
+    color:var(--ink);
+    max-width:64ch;
+    font-weight:400;
+  }
+  p.lede-small{
+    font-family:"Inter Tight",sans-serif;
+    font-size:14.5px;
+    color:var(--ink-mute);
+    letter-spacing:.01em;
+  }
+  ul,ol{padding-left:1.25em;margin:10px 0}
+  li{margin:6px 0;max-width:72ch}
+  /* pull quote */
+  .pullquote{
+    border-left:2px solid var(--ink);
+    padding:8px 0 8px 22px;
+    margin:28px 0;
+    font-family:"Fraunces",serif;
+    font-style:italic;
+    font-size:24px;
+    line-height:1.4;
+    color:var(--ink);
+    max-width:60ch;
+  }
+  .pullquote .who{
+    display:block;
+    margin-top:10px;
+    font-family:"JetBrains Mono",monospace;
+    font-style:normal;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--ink-mute);
+  }
+  /* tables */
+  .tbl{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 6px;
+    font-size:14.5px;
+  }
+  .tbl th,.tbl td{
+    text-align:left;
+    vertical-align:top;
+    padding:12px 14px 12px 0;
+    border-bottom:1px solid var(--hairline);
+  }
+  .tbl th{
+    font-family:"JetBrains Mono",monospace;
+    font-weight:500;
+    font-size:11.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-mute);
+    border-bottom:1px solid var(--ink);
+    padding-top:6px;
+  }
+  .tbl td strong{font-weight:600}
+  .tbl.compact th,.tbl.compact td{padding:10px 12px 10px 0;font-size:14px}
+  .tbl .num{font-family:"JetBrains Mono",monospace;white-space:nowrap}
+  /* tag */
+  .tag{
+    display:inline-block;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:2px 7px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:transparent;
+    margin-right:4px;
+  }
+  .tag.accent{color:var(--accent);border-color:var(--accent)}
+  .tag.leaf{color:var(--leaf);border-color:var(--leaf)}
+  .tag.mute{color:var(--ink-mute);border-color:var(--hairline)}
+  /* exec summary */
+  .exec{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:0;
+    border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+    margin:10px 0 0;
+  }
+  .exec .item{
+    padding:22px 22px 22px 0;
+    border-bottom:1px solid var(--hairline);
+    border-right:1px solid var(--hairline);
+  }
+  .exec .item:nth-child(2n){border-right:none;padding-left:22px;padding-right:0}
+  .exec .item:nth-last-child(-n+2){border-bottom:none}
+  .exec .n{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.18em;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  .exec h5{
+    font-family:"Fraunces",serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 6px;
+    line-height:1.25;
+  }
+  .exec p{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.6}
+  @media (max-width:760px){
+    .exec{grid-template-columns:1fr}
+    .exec .item{border-right:none;padding:18px 0}
+    .exec .item:nth-child(2n){padding-left:0}
+    .exec .item:nth-last-child(-n+2){border-bottom:1px solid var(--hairline)}
+    .exec .item:last-child{border-bottom:none}
+  }
+  /* module grid */
+  .modules{
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap:0;
+    border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--ink);
+  }
+  .modules .m{
+    padding:20px 22px 22px 0;
+    border-bottom:1px solid var(--hairline);
+    border-right:1px solid var(--hairline);
+  }
+  .modules .m:last-child{border-right:none}
+  .modules .m h5{
+    font-family:"Fraunces",serif;
+    font-weight:600;
+    font-size:18px;
+    margin:6px 0 8px;
+  }
+  .modules .m .mn{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.2em;color:var(--accent);
+    text-transform:uppercase;
+  }
+  .modules .m ul{padding-left:1em;margin:6px 0 0;color:var(--ink-soft);font-size:14px}
+  /* code-ish diagram */
+  pre.flow{
+    background:#FBF6EC;
+    border:1px solid var(--hairline);
+    border-left:3px solid var(--ink);
+    padding:18px 18px;
+    overflow-x:auto;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    white-space:pre;
+    margin:14px 0 8px;
+  }
+  /* call-out paragraphs (inline emphasis, no color blocks) */
+  .marginalia{
+    display:grid;
+    grid-template-columns: 22ch 1fr;
+    gap:24px;
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+    padding:18px 0;
+    margin:24px 0;
+  }
+  .marginalia .side{
+    font-family:"JetBrains Mono",monospace;
+    text-transform:uppercase;
+    font-size:11.5px;
+    letter-spacing:.18em;
+    color:var(--accent);
+    line-height:1.5;
+    padding-top:3px;
+  }
+  .marginalia .side.leaf{color:var(--leaf)}
+  .marginalia .body{font-size:15.5px;color:var(--ink);max-width:64ch}
+  @media (max-width:760px){
+    .marginalia{grid-template-columns:1fr;gap:6px}
+  }
+  /* two-col compare */
+  .compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin:18px 0 4px;
+  }
+  .compare .col{
+    border-top:1px solid var(--ink);
+    padding-top:12px;
+  }
+  .compare .col h5{
+    font-family:"Fraunces",serif;
+    font-weight:600;
+    font-size:16px;margin:0 0 8px;
+  }
+  .compare .col.muted h5{color:var(--ink-mute)}
+  .compare .col p{font-size:14.5px;color:var(--ink-soft);margin:0 0 8px}
+  @media (max-width:760px){.compare{grid-template-columns:1fr}}
+  /* footer & cite */
+  footer.colophon{
+    margin-top:80px;
+    border-top:2px solid var(--ink);
+    padding-top:22px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:24px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11.5px;letter-spacing:.06em;
+    color:var(--ink-mute);
+    text-transform:uppercase;
+  }
+  footer.colophon a{color:var(--accent)}
+  @media (max-width:760px){footer.colophon{grid-template-columns:1fr}}
+  /* responsive layout */
+  @media (max-width:980px){
+    .columns{grid-template-columns:1fr;gap:24px}
+    nav.toc{position:relative;top:auto}
+  }
+  /* small horizontal hr */
+  hr.rule{
+    border:none;border-top:1px solid var(--ink);
+    margin:30px 0 10px;
+  }
+  hr.rule-soft{
+    border:none;border-top:1px dashed var(--hairline);
+    margin:24px 0;
+  }
+  /* references */
+  .refs{font-size:13px;color:var(--ink-soft);font-family:"JetBrains Mono",monospace}
+  .refs li{margin:6px 0}
+  /* hide focus outlines but keep keyboard ring on actual focus */
+  :focus{outline:1px solid var(--accent);outline-offset:2px}
+
+  /* subtle enter motion (respects reduced motion) */
+  @media (prefers-reduced-motion: no-preference){
+    section.block{opacity:0;transform:translateY(6px);transition: opacity .5s ease, transform .5s cubic-bezier(0.23,1,0.32,1)}
+    section.block.in{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="brand">
+      <span class="glyph">WG</span>
+      <span>WorkGraph AI · Strategic Brief</span>
+    </div>
+    <div class="meta">
+      Vol. 01 / Issue 01 · 2026<br/>
+      Prepared by Manus AI
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Cover">
+    <div class="kicker">A product strategy brief for cloud-desktop operations</div>
+    <h1>Understand <em>work</em>, not just activity.</h1>
+    <p class="deck">
+      A consolidated plan to evolve a VM-based desktop recorder into <strong>WorkGraph AI</strong> — an AI Work Intelligence Platform that turns secure cloud-desktop activity into project intelligence, workflow maps, knowledge memory, SOPs and AI-ready skills, while governing the cost of the cloud desktops and AI compute it runs on.
+    </p>
+    <div class="byline">
+      <span><strong>Audience</strong> · Founder, COO, CIO, CISO, Head of Product</span>
+      <span><strong>Domain</strong> · Cloud Desktop · Workforce · AI Agents</span>
+      <span><strong>Scope</strong> · Positioning · Functions · Roadmap · Cost</span>
+    </div>
+  </section>
+
+  <!-- BODY -->
+  <div class="columns">
+
+    <!-- TOC -->
+    <nav class="toc" aria-label="Table of Contents">
+      <div class="label">Contents</div>
+      <ol>
+        <li><a href="#summary"><span class="num">00</span><span>Executive Summary</span></a></li>
+        <li><a href="#positioning"><span class="num">I</span><span>Reframing the Product</span></a></li>
+        <li><a href="#market"><span class="num">II</span><span>Market &amp; Competition</span></a></li>
+        <li><a href="#acceptance"><span class="num">III</span><span>Enterprise Acceptance</span></a></li>
+        <li><a href="#modules"><span class="num">IV</span><span>Product Blueprint</span></a></li>
+        <li><a href="#workflow"><span class="num">V</span><span>Workflow Intelligence</span></a></li>
+        <li><a href="#knowledge"><span class="num">VI</span><span>Knowledge Mining</span></a></li>
+        <li><a href="#compute"><span class="num">VII</span><span>Compute Governance</span></a></li>
+        <li><a href="#architecture"><span class="num">VIII</span><span>Architecture</span></a></li>
+        <li><a href="#roadmap"><span class="num">IX</span><span>Roadmap &amp; Cost</span></a></li>
+        <li><a href="#pricing"><span class="num">X</span><span>Pricing &amp; Model</span></a></li>
+        <li><a href="#gtm"><span class="num">XI</span><span>GTM &amp; Wedge</span></a></li>
+        <li><a href="#risks"><span class="num">XII</span><span>Risks &amp; Principles</span></a></li>
+        <li><a href="#appendix"><span class="num">A</span><span>References</span></a></li>
+      </ol>
+    </nav>
+
+    <!-- ARTICLE -->
+    <article>
+
+      <!-- EXECUTIVE SUMMARY -->
+      <section class="block" id="summary">
+        <div class="section-head">
+          <span class="section-index">00 — Executive Summary</span>
+        </div>
+        <h2>Six judgments to anchor every decision that follows.</h2>
+        <p class="lead">
+          The product should not be sold as another employee monitor. Its real moat is that it sits inside the cloud desktop, sees how knowledge work actually happens across systems, and can turn that into workflow graphs, knowledge memory, SOPs, agent skills and compute-cost savings.
+        </p>
+
+        <div class="exec">
+          <div class="item">
+            <div class="n">01 · Position</div>
+            <h5>Rename the category, not just the feature.</h5>
+            <p>Reposition from “Desktop Monitor / Employee Monitoring” to <strong>AI Work Intelligence Platform for Cloud Desktops</strong>. The category change unlocks executive, IT and AI budgets instead of HR-only spend.</p>
+          </div>
+          <div class="item">
+            <div class="n">02 · Market</div>
+            <h5>Five adjacent markets, one center.</h5>
+            <p>Time tracking, workforce analytics, insider-risk DLP, enterprise AI search, and process / task mining all overlap here. None of them owns the cloud-desktop layer; that is the wedge.</p>
+          </div>
+          <div class="item">
+            <div class="n">03 · Acceptance</div>
+            <h5>Operations-heavy, system-rich teams first.</h5>
+            <p>Highest acceptance comes from BPO, logistics back-office, insurance ops and finance shared services — workflows are repeatable, SOPs are valuable, and the buyer is the COO, not HR.</p>
+          </div>
+          <div class="item">
+            <div class="n">04 · Product</div>
+            <h5>Seven modules, three product packs.</h5>
+            <p>Capture · Understanding · Workflow · Knowledge · Personal Assistant · Manager Dashboard · Compute Optimization. Sold as <em>Work Insight</em>, <em>Work Intelligence Pro</em>, and <em>Workflow / Knowledge / Agent Enterprise</em>.</p>
+          </div>
+          <div class="item">
+            <div class="n">05 · Economics</div>
+            <h5>Don’t price like Time Doctor.</h5>
+            <p>Public benchmarks cluster at <span class="num">$9–$20/user/month</span> for monitoring, <span class="num">$29–$35/user/month</span> for AI assistants and insider-risk. Item should layer SaaS + private deployment + AI / storage usage + hardware service.</p>
+          </div>
+          <div class="item">
+            <div class="n">06 · Sequence</div>
+            <h5>Ship the personal value first.</h5>
+            <p>Start with AI daily summaries and project attribution that <em>employees</em> actually want to use. Workflow maps, SOP factory and knowledge connectors follow. Agent execution and compute governance are last.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- I POSITIONING -->
+      <section class="block" id="positioning">
+        <div class="section-head">
+          <span class="section-index">I — Reframing the Product</span>
+        </div>
+        <h2>From a recorder of screens to a graph of work.</h2>
+        <p class="lead">
+          Today’s system already does the hard part: a user works inside a VM, the system records the day, and AI summarises what that person did. That is well past traditional time tracking. The right next step is to convert that signal into <em>structured work</em> — projects, events, decisions, exceptions and skills — and to surround it with the email, drive and business systems that explain <em>why</em> the screen looks the way it does.
+        </p>
+
+        <div class="pullquote">
+          Screen activity → work events → workflow graph → SOP &amp; knowledge → agent skill → automation.
+          <span class="who">The core narrative</span>
+        </div>
+
+        <h3>What the product actually is</h3>
+        <table class="tbl">
+          <thead><tr><th style="width:42%">Layer</th><th style="width:29%">Traditional Monitors</th><th>This Product</th></tr></thead>
+          <tbody>
+            <tr><td>Data Layer</td><td>Time, screenshots, URL / App</td><td>VM screen stream, window events, OCR / VLM, document &amp; mail context, resource signals</td></tr>
+            <tr><td>Analysis</td><td>Activity score, productivity buckets</td><td>Project attribution, event chains, workflow paths, bottlenecks, anomalies, intent</td></tr>
+            <tr><td>Knowledge</td><td>Enterprise search or doc index</td><td>Personal / team work memory and project knowledge graph with source citations</td></tr>
+            <tr><td>Automation</td><td>Reports &amp; reminders</td><td>Video-to-skill, agent skills, audited execution, automation recommendations</td></tr>
+            <tr><td>Infrastructure</td><td>Stand-alone VDI or recorder</td><td>VM sizing, GPU sharing, AI inference scheduling, cold/hot storage tiering</td></tr>
+          </tbody>
+        </table>
+
+        <div class="marginalia">
+          <div class="side">Avoid · Bossware framing</div>
+          <div class="body">
+            The most expensive mistake is selling this as “we can watch your employees”. That framing caps the price, blocks HR/Legal and erodes employee trust before the product can demonstrate value. Frame it as <strong>understanding work</strong>, surfacing rework, generating SOPs, and giving every employee an AI work memory and daily summary they actually want.
+          </div>
+        </div>
+
+        <h3>Product naming</h3>
+        <p>
+          Among candidates, <strong>WorkGraph AI</strong> is recommended. It signals the graph nature of the data (work, knowledge, process), it scales beyond a single feature, and it survives translation to enterprise buyers. Acceptable alternates include <em>Workflow Intelligence</em> and <em>Work Memory</em>; <em>Desktop Intelligence</em> is precise but risks being read as a monitor.
+        </p>
+      </section>
+
+      <!-- II MARKET -->
+      <section class="block" id="market">
+        <div class="section-head">
+          <span class="section-index">II — Market &amp; Competition</span>
+        </div>
+        <h2>Five adjacent markets — and the gap between them.</h2>
+        <p class="lead">
+          The opportunity sits at the intersection of time tracking, workforce analytics, insider risk, enterprise AI search and process / task mining. Each is a multi-hundred-million to multi-billion dollar category. None of them owns the cloud-desktop signal end-to-end, which is what makes this product structurally different.
+        </p>
+
+        <h3>Competitive cartography</h3>
+        <table class="tbl">
+          <thead><tr><th>Category</th><th>Representatives</th><th>Strengths</th><th>What they miss</th></tr></thead>
+          <tbody>
+            <tr><td>Time tracking &amp; screenshots</td><td>Time Doctor · Hubstaff · DeskTime</td><td>Hours, screenshots, projects, payroll</td><td>No understanding of business process; weak trust signal</td></tr>
+            <tr><td>Workforce analytics</td><td>ActivTrak · Insightful · Viva Insights</td><td>Capacity, focus, organisation-level performance</td><td>Shallow process modeling; rarely produces SOPs</td></tr>
+            <tr><td>Insider risk &amp; DLP</td><td>Teramind · Veriato · CurrentWare</td><td>Forensic recording, behaviour rules, DLP</td><td>Security framing → long, defensive sales cycles</td></tr>
+            <tr><td>Enterprise AI search</td><td>Glean · Microsoft 365 Copilot · Dust · Gemini Enterprise</td><td>100+ connectors, RAG, agents, permissions</td><td>Blind to <em>real</em> desktop work; no process intelligence</td></tr>
+            <tr><td>Process / task mining</td><td>Celonis · UiPath · ABBYY · KYP.ai · Microsoft Process Mining</td><td>Process discovery, automation ROI</td><td>System-log centric; heavy implementation; misses desktop reality</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Public pricing reference</h3>
+        <table class="tbl compact">
+          <thead><tr><th>Product</th><th>Entry</th><th>Main paid</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Time Doctor</td><td class="num">$8/u/mo</td><td class="num">$14–$20</td><td>Basic / Standard / Premium; Enterprise private cloud<sup>[1]</sup></td></tr>
+            <tr><td>Hubstaff</td><td class="num">$7</td><td class="num">$9–$12</td><td>Starter → Team; Enterprise $25 with HIPAA / SSO<sup>[2]</sup></td></tr>
+            <tr><td>ActivTrak</td><td class="num">$0 (3 users)</td><td class="num">$10–$19</td><td>Essentials / Essentials Plus / Professional<sup>[3]</sup></td></tr>
+            <tr><td>Insightful</td><td class="num">$8</td><td class="num">$12–$16</td><td>Workforce Analytics + Workflow Optimization combo<sup>[4]</sup></td></tr>
+            <tr><td>DeskTime</td><td class="num">$6.42</td><td class="num">$9.17</td><td>Pro / Premium / Enterprise<sup>[5]</sup></td></tr>
+            <tr><td>Teramind</td><td class="num">$15</td><td class="num">$30–$35</td><td>Starter · UAM · DLP · Enterprise; 5-seat min<sup>[6]</sup></td></tr>
+            <tr><td>Glean / Copilot / Dust</td><td class="num">$29–$30</td><td class="num">custom</td><td>Enterprise AI assistants with connectors &amp; RAG<sup>[7][8]</sup></td></tr>
+          </tbody>
+        </table>
+
+        <div class="marginalia">
+          <div class="side leaf">Strategic posture</div>
+          <div class="body">
+            Compete with Time Doctor on the <em>entry</em> tier ($15–$25/user/month with private deployment), but win the budget conversation by entering Workflow Optimization and Enterprise Knowledge Assistant tiers ($29–$45+/user/month) and a hardware / VDI / GPU optimization service that competitors cannot bundle.
+          </div>
+        </div>
+      </section>
+
+      <!-- III ACCEPTANCE -->
+      <section class="block" id="acceptance">
+        <div class="section-head">
+          <span class="section-index">III — Enterprise Acceptance</span>
+        </div>
+        <h2>Companies don’t refuse monitoring. They refuse opacity.</h2>
+        <p class="lead">
+          Field research and academic studies are consistent: enterprises will pay for visibility, but only when it is transparent, role-appropriate, and creates value the employee can also feel. The product must therefore lead with employee-visible benefits (work memory, daily summary, knowledge search) and offer manager and IT views as configurable overlays, not as the headline.
+        </p>
+
+        <h3>Acceptance by buyer role</h3>
+        <table class="tbl">
+          <thead><tr><th>Role</th><th>What they want to hear</th><th>What turns them off</th></tr></thead>
+          <tbody>
+            <tr><td>CEO / COO</td><td>Project throughput, bottleneck removal, SOP coverage</td><td>Low-signal activity scores</td></tr>
+            <tr><td>CFO</td><td>SaaS / GPU / VM waste recovery, work-cost attribution</td><td>Vague AI benefits without ROI</td></tr>
+            <tr><td>CIO / IT</td><td>Private deployment, SSO/SCIM, auditability, VDI integration</td><td>Black-box AI exfiltration</td></tr>
+            <tr><td>CISO</td><td>Rule-triggered evidence, DLP, sensitive data masking</td><td>Continuous unfiltered capture</td></tr>
+            <tr><td>HR</td><td>Transparent policy, employee-first insight, fair appeals</td><td>Automated personnel decisions</td></tr>
+            <tr><td>Line Manager</td><td>Auto daily reports, project status without asking</td><td>Replay-as-judgement workflows</td></tr>
+            <tr><td>Employee</td><td>Personal assistant, knowledge memory, faster handover</td><td>Off-hours capture, individual rankings</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Acceptance by industry</h3>
+        <table class="tbl">
+          <thead><tr><th>Industry</th><th>Fit</th><th>Why</th><th>First scenario</th></tr></thead>
+          <tbody>
+            <tr><td>BPO / Call center / Back office</td><td><span class="tag accent">Very high</span></td><td>Repetition, QA, ramp-up cost, virtual desktops</td><td>Ticket triage, billing, claims, data entry</td></tr>
+            <tr><td>Logistics back office</td><td><span class="tag accent">Very high</span></td><td>WMS/TMS/OMS/YMS sprawl, exception-driven</td><td>CSR, dispatch, billing, EDI failures</td></tr>
+            <tr><td>Finance / insurance operations</td><td><span class="tag">High</span></td><td>Compliance demand; privacy bar is higher</td><td>KYC, approvals, claims</td></tr>
+            <tr><td>Healthcare admin / RCM</td><td><span class="tag">High</span></td><td>Repetitive, regulated, document heavy</td><td>Billing, follow-ups, patient admin</td></tr>
+            <tr><td>Software engineering</td><td><span class="tag mute">Low</span></td><td>Strong privacy expectations; engineers reject monitoring</td><td>Outsourcing, QA, support engineers only</td></tr>
+          </tbody>
+        </table>
+
+        <div class="marginalia">
+          <div class="side">Speak the right language</div>
+          <div class="body">
+            Replace “we can watch employees” with “we help you understand how work actually gets done.” Replace “catch slackers” with “surface rework, bottlenecks and training gaps.” Replace “managers can replay an employee’s day” with “authorised reviewers can pull permissioned evidence for specific events.”
+          </div>
+        </div>
+      </section>
+
+      <!-- IV MODULES -->
+      <section class="block" id="modules">
+        <div class="section-head">
+          <span class="section-index">IV — Product Blueprint</span>
+        </div>
+        <h2>Seven modules. Three commercial packs.</h2>
+        <p class="lead">
+          The product is best built as seven independently meaningful modules. They can be sequenced in development and bundled into three commercial offerings: a base Work Insight pack, a workflow / knowledge intelligence pack, and an enterprise platform that includes the agent factory and compute governance.
+        </p>
+
+        <div class="modules">
+          <div class="m">
+            <div class="mn">M1</div>
+            <h5>Desktop Capture Layer</h5>
+            <ul>
+              <li>VM session recording</li>
+              <li>Keyframes &amp; OCR</li>
+              <li>Active window / app / URL</li>
+              <li>Sensitive data masking</li>
+              <li>Retention policies</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M2</div>
+            <h5>AI Work Understanding</h5>
+            <ul>
+              <li>Task &amp; session segmentation</li>
+              <li>Business object detection</li>
+              <li>Daily summary &amp; confidence</li>
+              <li>Rework &amp; anomaly signals</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M3</div>
+            <h5>Workflow Mining</h5>
+            <ul>
+              <li>Repetitive workflow discovery</li>
+              <li>Workflow map &amp; variants</li>
+              <li>Bottleneck &amp; deviation</li>
+              <li>SOP drafts</li>
+              <li>Automation scoring</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M4</div>
+            <h5>Knowledge Mining</h5>
+            <ul>
+              <li>Email / Drive / SharePoint</li>
+              <li>Ticket / CRM / WMS / TMS</li>
+              <li>Permission inheritance</li>
+              <li>RAG + GraphRAG</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M5</div>
+            <h5>Personal Work Assistant</h5>
+            <ul>
+              <li>Daily &amp; weekly summary</li>
+              <li>Auto timesheet</li>
+              <li>Personal memory search</li>
+              <li>Handover docs &amp; to-dos</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M6</div>
+            <h5>Manager Dashboard</h5>
+            <ul>
+              <li>Project / team trends</li>
+              <li>Bottleneck heatmaps</li>
+              <li>Training gap analysis</li>
+              <li>Automation candidate list</li>
+            </ul>
+          </div>
+          <div class="m">
+            <div class="mn">M7</div>
+            <h5>Compute Optimization</h5>
+            <ul>
+              <li>VM idle &amp; auto-suspend</li>
+              <li>GPU / CPU attribution</li>
+              <li>AI inference routing</li>
+              <li>Edge / private inference</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Three commercial packs</h3>
+        <table class="tbl">
+          <thead><tr><th>Pack</th><th>Modules</th><th>Buyer</th><th>Indicative price</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Work Insight Basic</strong></td><td>M1 + M2 + M5 + M6</td><td>Ops manager, BPO lead</td><td class="num">$15/user/month</td></tr>
+            <tr><td><strong>Work Intelligence Pro</strong></td><td>+ M3 partial · advanced dashboards</td><td>COO, transformation</td><td class="num">$25/user/month</td></tr>
+            <tr><td><strong>Workflow + Knowledge + Agent</strong></td><td>+ M3 full · M4 · agent skills</td><td>CIO, AI office</td><td class="num">$45+/user/month or custom</td></tr>
+            <tr><td><strong>Compute Optimization Add-on</strong></td><td>M7</td><td>IT, FinOps</td><td class="num">$5–$15/VM/month or savings share</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- V WORKFLOW -->
+      <section class="block" id="workflow">
+        <div class="section-head">
+          <span class="section-index">V — Workflow Intelligence</span>
+        </div>
+        <h2>Don’t store screenshots. Store work events.</h2>
+        <p class="lead">
+          The long-term asset of this product is not a video archive. It is a structured graph of how work happens — sessions, projects, events, steps, decisions, exceptions and skills. Building the right schema from day one is what turns a recorder into a system of intelligence.
+        </p>
+
+        <h3>Event model</h3>
+        <table class="tbl">
+          <thead><tr><th>Layer</th><th>Definition</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Session</td><td>A continuous span of work</td><td>09:15–10:02 handling ABC shipment exception</td></tr>
+            <tr><td>Project / Case</td><td>Business entity</td><td>Client ABC · Order #12345 · Ticket #567</td></tr>
+            <tr><td>Event</td><td>What happened in business terms</td><td>Address change · customer reply · invoice match</td></tr>
+            <tr><td>Step</td><td>UI-level action</td><td>Open WMS → search order → view inventory → update status</td></tr>
+            <tr><td>Decision</td><td>Branching judgement</td><td>Inventory insufficient → escalate to supervisor</td></tr>
+            <tr><td>Exception</td><td>Block, rework, error</td><td>System error · missing customer info · duplicate entry</td></tr>
+            <tr><td>Skill</td><td>Reusable capability</td><td>Address change · POD reissue · EDI failure triage</td></tr>
+          </tbody>
+        </table>
+
+        <h3>AI pipeline</h3>
+<pre class="flow">screen video / keyframes
+  └─ OCR + UI detection + active window + URL + app metadata
+       └─ low-cost classifier: work / idle / meeting / system / sensitive
+            └─ task segmentation: sessions and events
+                 └─ entity linking: client · order · ticket · SKU · email · invoice
+                      └─ workflow reconstruction: steps · decisions · exceptions · outcomes
+                           └─ summary · SOP · bottleneck · automation opportunity</pre>
+
+        <h3>Key algorithmic capabilities</h3>
+        <table class="tbl compact">
+          <thead><tr><th>Capability</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Task segmentation</td><td>Splits a full day into intelligible work units rather than per-minute fragments.</td></tr>
+            <tr><td>Entity linking</td><td>Ties order numbers, ticket IDs, customer names and document references across screens.</td></tr>
+            <tr><td>Workflow clustering</td><td>Detects repeating procedures across multiple people.</td></tr>
+            <tr><td>Deviation detection</td><td>Surfaces paths that deviate from the dominant variant.</td></tr>
+            <tr><td>Rework detection</td><td>Finds duplicate copy-paste, repeated lookups and field churn.</td></tr>
+            <tr><td>Automation scoring</td><td>Ranks candidates by frequency, regularity, error rate and API feasibility.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Example MVP output</h3>
+        <div class="pullquote" style="font-style:normal;font-size:18px;line-height:1.55">
+          <strong>Jane · CSR team — Daily Work Summary.</strong> Handled 18 customer order issues today: 7 shipment status checks, 4 address changes, 3 billing inquiries, 2 inventory exceptions, 2 carrier delay follow-ups. <em>Bottleneck:</em> address-change flow toggled between Email, WMS, TMS and the customer portal; avg. handling time 11.3 min, 42% spent on duplicate lookups. <em>Automation candidate:</em> Address Change Assistant — extract order number from email, validate customer permission, call WMS/TMS APIs, prepare an approval step for human review.
+          <span class="who">Generated automatically · evidence linked</span>
+        </div>
+      </section>
+
+      <!-- VI KNOWLEDGE -->
+      <section class="block" id="knowledge">
+        <div class="section-head">
+          <span class="section-index">VI — Knowledge Mining</span>
+        </div>
+        <h2>Documents say what is true. Screens say what is done.</h2>
+        <p class="lead">
+          Enterprise knowledge platforms know what is written in a document, an email, a ticket or a wiki. They generally do not know what an employee actually did with that information. The product’s differentiation is to fuse the two — anchoring every AI answer to both written sources and observed behaviour, always with citation.
+        </p>
+
+        <h3>Data sources</h3>
+        <table class="tbl compact">
+          <thead><tr><th>Source</th><th>What can be mined</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Email (Outlook · Gmail)</td><td>Requests, exceptions, commitments, attachments, context</td><td>Recovers the trigger of work</td></tr>
+            <tr><td>Drive / SharePoint / OneDrive</td><td>SOPs, contracts, quotes, templates, customer files</td><td>Formal knowledge anchors</td></tr>
+            <tr><td>Screen activity</td><td>Actual paths, fields, human judgement</td><td>Captures tacit knowledge</td></tr>
+            <tr><td>Ticket · CRM · WMS · TMS</td><td>Structured business entities</td><td>Entity backbone for the graph</td></tr>
+            <tr><td>Chat (Slack · Teams)</td><td>Ad-hoc conversations, exceptions, informal lore</td><td>Fills informal knowledge gaps</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Knowledge graph schema</h3>
+<pre class="flow">Employee  ──handles──>  Task / Case
+Task/Case ──belongs_to──> Client / Project
+Task/Case ──uses────────> Application / Document / Email
+Task/Case ──contains───>  Entity: Order · Shipment · SKU · Invoice · Ticket
+Task/Case ──follows────>  Workflow
+Workflow  ──has_steps──>  Step
+Workflow  ──has_exception──> Exception
+Exception ──resolved_by──> Decision / SOP / Human Expert
+SOP       ──generated_from──> Screen Evidence + Email Evidence + Document Evidence</pre>
+
+        <h3>Two assistants, one substrate</h3>
+        <div class="compare">
+          <div class="col">
+            <h5>Personal assistant</h5>
+            <p>“Where did I leave the ABC case yesterday?”</p>
+            <p>“Generate today’s end-of-day summary.”</p>
+            <p>“Which email or page showed me this tracking number?”</p>
+            <p>“List my unfinished items.”</p>
+            <p>“Draft a training note from cases I handled this week.”</p>
+          </div>
+          <div class="col">
+            <h5>Enterprise assistant</h5>
+            <p>“What is our standard address-change process?”</p>
+            <p>“Who handles carrier-delay exceptions most often?”</p>
+            <p>“What are ABC’s most common issues?”</p>
+            <p>“Why is this workflow taking this long on average?”</p>
+            <p>“Which processes are the best automation candidates?”</p>
+          </div>
+        </div>
+
+        <div class="marginalia">
+          <div class="side">Required · source citation</div>
+          <div class="body">
+            Every AI answer must cite the screen segment, email, document or system event it was derived from. Answers without source linkage cannot be used for management decisions, audit or process improvement.
+          </div>
+        </div>
+      </section>
+
+      <!-- VII COMPUTE -->
+      <section class="block" id="compute">
+        <div class="section-head">
+          <span class="section-index">VII — Compute Governance</span>
+        </div>
+        <h2>The cloud-desktop layer is also a compute optimisation surface.</h2>
+        <p class="lead">
+          The same software that understands work can also explain compute. Because the platform sits inside the VM and observes both human activity and resource consumption, it can recommend VM sizing, suspend idle desktops, route AI inference to the cheapest viable model, and attribute compute cost back to user, project or department. This is structurally impossible for a SaaS recorder that has no relationship with the desktop infrastructure.
+        </p>
+
+        <h3>Operational questions to answer</h3>
+        <ul>
+          <li>Which VMs are idle for long periods but still being billed?</li>
+          <li>Which employees actually need GPU-class machines, and which do not?</li>
+          <li>Which AI tasks must use large multimodal models, and which can be solved by small ones?</li>
+          <li>Which screen segments carry no business signal and should not enter expensive inference?</li>
+          <li>How should compute be attributed across users, projects, customers and teams?</li>
+        </ul>
+
+        <h3>Capabilities</h3>
+        <table class="tbl">
+          <thead><tr><th>Capability</th><th>Description</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>VM idle detection</td><td>Combine screen, keyboard / mouse, app and business state</td><td>Cut idle cloud-desktop spend</td></tr>
+            <tr><td>Auto suspend / resume</td><td>Policy-driven VM lifecycle</td><td>Lower hosting cost</td></tr>
+            <tr><td>Cost attribution</td><td>VM / GPU / AI inference by user, project, customer</td><td>Enables chargeback / showback</td></tr>
+            <tr><td>AI model routing</td><td>Small models pre-filter, big models for keyframes only</td><td>Reduce inference unit cost</td></tr>
+            <tr><td>Edge inference</td><td>OCR · classifier · masking on local / private cloud</td><td>Cost &amp; privacy together</td></tr>
+          </tbody>
+        </table>
+
+        <div class="marginalia">
+          <div class="side leaf">Bundling opportunity</div>
+          <div class="body">
+            With a hardware partner (Lenovo / Dell / NVIDIA / VDI / GPU server vendors), the platform can be packaged as “AI Desktop Intelligence Appliance” or “Cloud Desktop Cost Governance”. This is the only category in which the product can plausibly sit alongside a six- to seven-figure hardware contract — and a seven-figure contract is already what your existing AI Cloud Desktop quote anticipates.
+          </div>
+        </div>
+      </section>
+
+      <!-- VIII ARCHITECTURE -->
+      <section class="block" id="architecture">
+        <div class="section-head">
+          <span class="section-index">VIII — Architecture</span>
+        </div>
+        <h2>A layered system with structured assets at the centre.</h2>
+
+<pre class="flow">[VM / Desktop Agent]
+   ├─ screen capture
+   ├─ active window · app · URL
+   ├─ keyboard / mouse idle signal
+   └─ local masking · compression
+        ↓
+[Ingestion Layer]
+   ├─ video chunks · keyframes
+   ├─ OCR text · metadata events
+   └─ connectors: email · drive · tickets
+        ↓
+[AI Processing Layer]
+   ├─ sensitive data detection
+   ├─ scene classification · task segmentation
+   ├─ entity extraction · workflow reconstruction
+   └─ summarisation · SOP · automation recommendation
+        ↓
+[Knowledge Layer]
+   ├─ relational DB · object storage
+   ├─ vector DB · graph DB
+   └─ time-series metrics
+        ↓
+[Application Layer]
+   ├─ personal assistant · manager dashboard
+   ├─ SOP factory · process mining
+   ├─ enterprise search
+   └─ compute cost dashboard</pre>
+
+        <h3>Recommended technology choices</h3>
+        <table class="tbl compact">
+          <thead><tr><th>Layer</th><th>Recommended technology</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend</td><td>React / Next.js, dashboards, timeline viewer</td></tr>
+            <tr><td>Backend</td><td>Python/FastAPI or Node.js/NestJS, event-driven</td></tr>
+            <tr><td>Video storage</td><td>S3-compatible object storage with lifecycle policy</td></tr>
+            <tr><td>Metadata DB</td><td>PostgreSQL</td></tr>
+            <tr><td>Vector DB</td><td>pgvector · Qdrant · Weaviate · Milvus</td></tr>
+            <tr><td>Graph DB</td><td>Neo4j (or PG graph extension early)</td></tr>
+            <tr><td>Queue</td><td>Kafka · RabbitMQ · SQS · Redis Queue</td></tr>
+            <tr><td>AI models</td><td>OCR + small classifier + VLM + text LLM + embeddings</td></tr>
+            <tr><td>Security</td><td>SSO / SAML, RBAC / ABAC, audit, encryption, masking</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Data retention policy</h3>
+        <table class="tbl compact">
+          <thead><tr><th>Artifact</th><th>Default retention</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Raw video</td><td>7–30 days (configurable)</td><td>Evidence only; not a long-term asset</td></tr>
+            <tr><td>Keyframes</td><td>30–90 days</td><td>Supports replay of important events</td></tr>
+            <tr><td>OCR &amp; event metadata</td><td>6–24 months</td><td>Fuel for analytics</td></tr>
+            <tr><td>Workflow · SOP · knowledge graph</td><td>Long-term</td><td>The actual product asset</td></tr>
+            <tr><td>Sensitive fields</td><td>Not stored or masked</td><td>Privacy &amp; compliance</td></tr>
+          </tbody>
+        </table>
+
+        <div class="marginalia">
+          <div class="side">Architectural principle</div>
+          <div class="body">
+            Don’t let video become the long-term asset. The long-term assets are structured workflow events, the knowledge graph, SOPs and statistical signals. Video is short-lived evidence behind those structured facts.
+          </div>
+        </div>
+      </section>
+
+      <!-- IX ROADMAP -->
+      <section class="block" id="roadmap">
+        <div class="section-head">
+          <span class="section-index">IX — Roadmap &amp; Cost</span>
+        </div>
+        <h2>Six phases. Pay only for what unlocks the next price tier.</h2>
+        <p class="lead">
+          Build in phases that each unlock a higher price tier. Phase 0 hardens the existing PoC. Phase 1 is the first commercially viable Work Insight MVP. Each subsequent phase opens a new category — workflow, SOP, knowledge, compute, enterprise — and a new buyer.
+        </p>
+
+        <table class="tbl">
+          <thead><tr><th>Phase</th><th>Goal</th><th>Duration</th><th>Team</th><th>Indicative cost</th></tr></thead>
+          <tbody>
+            <tr><td>Phase 0</td><td>Productise existing recording &amp; AI summary</td><td>4–6 weeks</td><td>1 FE · 1 BE · 1 AI · 0.5 QA · 0.5 PM</td><td class="num">$50K–$100K</td></tr>
+            <tr><td>Phase 1</td><td>Work Insight MVP — segmentation, attribution, daily report</td><td>8–12 weeks</td><td>2 BE · 1 FE · 2 AI · 1 QA · 1 PM</td><td class="num">$150K–$300K</td></tr>
+            <tr><td>Phase 2</td><td>SOP / Skill Factory — workflow mining, SOP drafts, scoring</td><td>10–14 weeks</td><td>2 BE · 1 FE · 2 AI · 1 Data · 1 QA</td><td class="num">$200K–$400K</td></tr>
+            <tr><td>Phase 3</td><td>Knowledge Mining — connectors, permissions, graph, RAG</td><td>12–16 weeks</td><td>2 BE · 1 FE · 2 AI · 1 Graph · 1 DevOps · 1 QA</td><td class="num">$250K–$500K</td></tr>
+            <tr><td>Phase 4</td><td>Compute Optimization — VM idle, cost attribution, routing</td><td>8–12 weeks</td><td>1 Infra · 1 BE · 1 FE · 1 AI · 1 DevOps</td><td class="num">$150K–$350K</td></tr>
+            <tr><td>Phase 5</td><td>Enterprise hardening — SSO · RBAC · audit · DLP · SOC 2</td><td>3–6 months</td><td>Security · DevOps · BE · QA · Compliance</td><td class="num">$300K–$700K</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Minimum saleable version</h3>
+        <p>
+          The first version that can be sold confidently should include VM recording &amp; timeline, app / URL / window stats, OCR plus basic sensitive masking, AI daily work summary, task segmentation, project / client / order / ticket entity recognition, manager dashboard, personal daily report, and basic workflow pattern discovery.
+        </p>
+
+        <h3>Minimum demo storyline</h3>
+        <ol>
+          <li>A logistics CSR receives a customer exception email.</li>
+          <li>They open WMS / TMS to look up the order and shipment.</li>
+          <li>The system identifies the client, order number, exception type and steps taken.</li>
+          <li>A daily summary is auto-generated for the CSR.</li>
+          <li>An SOP draft is proposed from the captured procedure.</li>
+          <li>Rework points (duplicate copy-paste and system toggling) are highlighted.</li>
+          <li>An Address Change Agent or Shipment Status Agent is recommended.</li>
+        </ol>
+
+        <div class="marginalia">
+          <div class="side">Capital sequencing</div>
+          <div class="body">
+            Phase 0 + Phase 1 (baseline funding around <span class="num">$200K–$400K</span>) is enough to land the first 50–200 VM pilot. Phases 2–4 should be funded by revenue from those pilots or by anchor enterprise contracts, not by speculative R&amp;D.
+          </div>
+        </div>
+      </section>
+
+      <!-- X PRICING -->
+      <section class="block" id="pricing">
+        <div class="section-head">
+          <span class="section-index">X — Pricing &amp; Model</span>
+        </div>
+        <h2>Don’t sell a SaaS seat. Sell a stack.</h2>
+        <p class="lead">
+          The product spans software, AI inference, video storage, private deployment and potentially hardware. A single per-seat price will either undercharge or scare buyers. The right model is a layered combination: subscription seats, modular add-ons, private deployment, SLA, AI / storage usage packs, and hardware / VDI optimisation service.
+        </p>
+
+        <h3>Tiered pricing</h3>
+        <table class="tbl">
+          <thead><tr><th>Tier</th><th>Indicative price</th><th>Buyer</th><th>Anchors on</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Monitor Basic</strong></td><td class="num">$8–$12/u/mo</td><td>Small / outsourced teams</td><td>Replaces Time Doctor / Hubstaff baseline</td></tr>
+            <tr><td><strong>Work Intelligence Pro</strong></td><td class="num">$18–$30/u/mo</td><td>Ops, logistics CSR, BPO</td><td>Beats ActivTrak Professional value</td></tr>
+            <tr><td><strong>Workflow Enterprise</strong></td><td class="num">$40–$80/u/mo</td><td>Mid- to large operations</td><td>Workflow optimisation &amp; SOP factory</td></tr>
+            <tr><td><strong>Knowledge + Agent Platform</strong></td><td>custom</td><td>CIO / COO / AI office</td><td>Glean / Copilot tier with action</td></tr>
+            <tr><td><strong>Compute Optimization Add-on</strong></td><td class="num">$5–$15/VM/mo or savings share</td><td>IT / FinOps</td><td>Hardware partner channel</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Project revenue</h3>
+        <p>
+          Mid-market and enterprise buyers expect implementation services. Layered project SKUs help close larger contracts and stabilise revenue.
+        </p>
+        <table class="tbl compact">
+          <thead><tr><th>Package</th><th>Indicative range</th></tr></thead>
+          <tbody>
+            <tr><td>Workflow Discovery Package</td><td class="num">$20K–$80K</td></tr>
+            <tr><td>SOP Factory Setup</td><td class="num">$30K–$120K</td></tr>
+            <tr><td>Enterprise Knowledge Integration</td><td class="num">$50K–$200K</td></tr>
+            <tr><td>Private Deployment / Compliance Package</td><td class="num">$100K+</td></tr>
+            <tr><td>AI Cloud Desktop Appliance (with hardware)</td><td class="num">$1M+ first year (see existing quote)</td></tr>
+          </tbody>
+        </table>
+
+        <h3>ROI logic</h3>
+        <table class="tbl compact">
+          <thead><tr><th>ROI source</th><th>Method</th></tr></thead>
+          <tbody>
+            <tr><td>Reduce repetitive operations</td><td>min saved / task × task volume × labour cost</td></tr>
+            <tr><td>Reduce ramp-up time</td><td>ramp days reduced × new hires × loaded cost</td></tr>
+            <tr><td>Reduce rework</td><td>error reduction × cost of handling</td></tr>
+            <tr><td>Automation opportunities</td><td>automatable processes × annual volume × unit saving</td></tr>
+            <tr><td>Cloud-desktop savings</td><td>idle VM hours × hourly cost</td></tr>
+            <tr><td>AI inference savings</td><td>small-model substitution rate × per-token / per-frame cost</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- XI GTM -->
+      <section class="block" id="gtm">
+        <div class="section-head">
+          <span class="section-index">XI — GTM &amp; Wedge</span>
+        </div>
+        <h2>Start where the work is messy and the buyer is the COO.</h2>
+        <p class="lead">
+          Don’t sell to every company that has employees. Pick one wedge where workflows are dense, exceptions are common, and SOPs are valuable. The strongest single wedge is <strong>logistics back-office workflow intelligence</strong>: WMS / TMS / OMS / YMS are operationally complex, exception-driven, and ill-served by both monitoring tools and traditional process mining.
+        </p>
+
+        <div class="pullquote">
+          Logistics back-office workflow intelligence.
+          <span class="who">The wedge</span>
+        </div>
+
+        <h3>First demos</h3>
+        <table class="tbl">
+          <thead><tr><th>Demo</th><th>What it shows</th><th>What buyer cares about</th></tr></thead>
+          <tbody>
+            <tr><td>Customer exception handling</td><td>Email → WMS / TMS lookup → customer reply, with auto event + SOP draft</td><td>Cycle time, new-hire training</td></tr>
+            <tr><td>Billing reconciliation</td><td>Invoice · POD · rate · accessorial reconciliation</td><td>Errors and rework reduction</td></tr>
+            <tr><td>EDI failure resolution</td><td>Error identification, system lookups, expert decisions</td><td>Capturing expert knowledge</td></tr>
+            <tr><td>VM cost optimisation</td><td>Idle VMs, per-user utilisation, suspend recommendations</td><td>IT and finance direct ROI</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Stakeholders</h3>
+        <ul>
+          <li><strong>COO / VP of Operations</strong> — cares about cycle time, rework, training and capacity.</li>
+          <li><strong>CIO / IT Director</strong> — cares about security, integration, cloud-desktop cost and AI governance.</li>
+          <li><strong>HR / Workforce Manager</strong> — cares about employee experience, transparency and compliance.</li>
+          <li><strong>Finance</strong> — cares about ROI, cost attribution and provable savings.</li>
+        </ul>
+
+        <h3>Standard one-paragraph pitch</h3>
+        <p>
+          WorkGraph AI helps operations-heavy companies understand how work actually gets done across desktops, enterprise applications, email and shared documents. It does not stop at screenshots or time tracking. It converts real work activity into workflow maps, bottleneck analysis, SOP drafts, personal work memory and automation candidates. For IT teams, it also connects work activity with VM and AI compute utilisation, helping reduce cloud-desktop and inference cost.
+        </p>
+      </section>
+
+      <!-- XII RISKS -->
+      <section class="block" id="risks">
+        <div class="section-head">
+          <span class="section-index">XII — Risks &amp; Principles</span>
+        </div>
+        <h2>The hard part is not technology. It is restraint.</h2>
+
+        <h3>Risks</h3>
+        <table class="tbl">
+          <thead><tr><th>Risk</th><th>Description</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>Bossware framing</td><td>Employees and media may read the product as surveillance</td><td>Lead with personal assistant, aggregate insights, transparent policy</td></tr>
+            <tr><td>Privacy &amp; compliance</td><td>Recordings can contain PII, customer data, credentials</td><td>Masking, RBAC, retention, audit, consent flows</td></tr>
+            <tr><td>AI hallucination</td><td>Wrong summaries can cause management errors</td><td>Confidence scores, source citation, human review</td></tr>
+            <tr><td>Cost runaway</td><td>Naïve VLM-on-everything destroys margins</td><td>Keyframe sampling, small-model pre-filter, only the meaningful frames go to VLM</td></tr>
+            <tr><td>Enterprise complexity</td><td>SSO, permissions, isolation, connectors slow deployment</td><td>Vertical templates first, enterprise hardening later</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Product principles</h3>
+        <ol>
+          <li>Process improvement is the value. Personal punishment is not.</li>
+          <li>Employees must receive a tangible benefit — summary, memory, handover, search, less reporting overhead.</li>
+          <li>Managers default to team and workflow views. Individual replay requires permission and reason.</li>
+          <li>Every AI conclusion must be traceable to evidence.</li>
+          <li>Video is short-term evidence. Workflow and knowledge graphs are the long-term asset.</li>
+          <li>Sensitive masking and retention rules ship on day one, not later.</li>
+          <li>Focus on one vertical first. Don’t sell as a generic HR SaaS.</li>
+          <li>The ultimate goal is an AI Skill Factory, not an employee monitor.</li>
+        </ol>
+
+        <div class="marginalia">
+          <div class="side leaf">Next best actions</div>
+          <div class="body">
+            (1) Lock the name <em>WorkGraph AI</em>. (2) Choose logistics CSR / back-office as the first vertical. (3) Build three concrete demos — customer exception, billing reconciliation, EDI failure. (4) Upgrade existing recording AI into a task / event / workflow data model. (5) Ship personal daily summary first, so employees feel the value before managers do. (6) Then add the manager dashboard and SOP factory. (7) Finally, integrate email / drive and compute optimisation.
+          </div>
+        </div>
+      </section>
+
+      <!-- APPENDIX -->
+      <section class="block" id="appendix">
+        <div class="section-head">
+          <span class="section-index">A — References</span>
+        </div>
+        <h2>Sources cited in this brief.</h2>
+        <p class="lede-small">Pricing and feature claims are taken from public vendor pages and major third-party reviews as of mid-2026; treat them as benchmarks, not guarantees.</p>
+        <ol class="refs">
+          <li>[1] Time Doctor Pricing — <a href="https://support.timedoctor.com/knowledge/understanding-time-doctor-pricing-plans" target="_blank" rel="noopener">support.timedoctor.com</a></li>
+          <li>[2] Hubstaff Plans &amp; Pricing — <a href="https://support.hubstaff.com/new-pricing-and-plans/" target="_blank" rel="noopener">support.hubstaff.com</a></li>
+          <li>[3] ActivTrak Pricing — <a href="https://www.activtrak.com/pricing/" target="_blank" rel="noopener">activtrak.com</a></li>
+          <li>[4] Insightful Pricing — <a href="https://www.insightful.io/pricing" target="_blank" rel="noopener">insightful.io</a></li>
+          <li>[5] DeskTime Pricing — <a href="https://desktime.com/pricing" target="_blank" rel="noopener">desktime.com</a></li>
+          <li>[6] Teramind Pricing — <a href="https://www.teramind.co/services/price/" target="_blank" rel="noopener">teramind.co</a></li>
+          <li>[7] Glean vs Microsoft 365 Copilot — <a href="https://www.glean.com/compare/glean-vs-copilot" target="_blank" rel="noopener">glean.com</a></li>
+          <li>[8] Top Glean Alternatives for AI-powered Enterprise Search — <a href="https://dust.tt/blog/glean-alternatives-ai-enterprise-search" target="_blank" rel="noopener">dust.tt</a></li>
+          <li>[9] NVIDIA Virtual GPUs — <a href="https://www.nvidia.com/en-us/data-center/virtual-solutions/" target="_blank" rel="noopener">nvidia.com</a></li>
+          <li>[10] AI Workload Cost Management — <a href="https://www.infracost.io/resources/glossary/ai-workload-cost-management" target="_blank" rel="noopener">infracost.io</a></li>
+          <li>[11] How AI Can Reduce VDI Costs and Boost Efficiency — <a href="https://www.apporto.com/streamlining-it-management-why-virtual-desktop-infrastructure-is-a-game-changer" target="_blank" rel="noopener">apporto.com</a></li>
+          <li>[12] Private Eyes, They See Your Every Move: Workplace Surveillance and Worker Well-Being — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11300163/" target="_blank" rel="noopener">PMC</a></li>
+          <li>[13] Key Compliance Laws for Remote Employee Monitoring &amp; Data Protection — <a href="https://www.worklytics.co/blog/key-compliance-laws-for-remote-employee-monitoring-data-protection" target="_blank" rel="noopener">worklytics.co</a></li>
+          <li>[14] Employee Data Privacy: Balancing Monitoring and Trust — <a href="https://trustarc.com/resource/employee-data-privacy-balancing-monitoring-and-trust/" target="_blank" rel="noopener">trustarc.com</a></li>
+          <li>[15] Best Process Mining Tools Compared (2026) — <a href="https://kyp.ai/process-mining-software-comparison/" target="_blank" rel="noopener">kyp.ai</a></li>
+          <li>[16] Top 9 Task Mining Tools — <a href="https://www.processexcellencenetwork.com/process-mining/articles/top-9-task-mining-tools-for-achieving-process-excellence" target="_blank" rel="noopener">processexcellencenetwork.com</a></li>
+        </ol>
+      </section>
+
+      <footer class="colophon">
+        <div>
+          <strong style="color:var(--ink)">WORKGRAPH AI · STRATEGIC BRIEF</strong><br/>
+          Prepared by Manus AI · Editorial Modernism layout · Set in Fraunces, Inter Tight, JetBrains Mono.<br/>
+          Pricing and competitive references are public as of 2026. No vendor endorsement implied.
+        </div>
+        <div style="text-align:right">
+          End of document · §A
+        </div>
+      </footer>
+
+    </article>
+  </div>
+</div>
+
+<script>
+  // Section reveal on scroll
+  if (window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    document.querySelectorAll('section.block').forEach(function(s){ io.observe(s); });
+  } else {
+    document.querySelectorAll('section.block').forEach(function(s){ s.classList.add('in'); });
+  }
+
+  // TOC active-state on scroll
+  var links = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = { link: a, el: el };
+  });
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var current = null;
+    Object.keys(map).forEach(function(id){
+      var top = map[id].el.getBoundingClientRect().top + window.scrollY;
+      if (top <= y) current = id;
+    });
+    links.forEach(function(a){ a.style.color = ''; });
+    if (current && map[current]) map[current].link.style.color = 'var(--accent)';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+</body>
+</html>
